@@ -1,3 +1,4 @@
+# requires adding: --extra-vars "instance_type_var=t2.micro"
 ---
 - hosts: localhost
   connection: local
