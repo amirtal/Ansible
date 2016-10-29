@@ -1,0 +1,62 @@
+---
+- hosts: localhost
+  connection: local
+  gather_facts: no
+  vars:
+    region: us-east-1
+    route_prefix: /32
+    access_key: AKIAICITH46DG2UFM63Q
+    secret_key: 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
+    ami: ami-2d39803a # ubuntu 14.04 (free tier)
+    instance_type: "{{ instance_type_var}}"
+  tasks:
+    - command: curl --silent --fail http://checkip.amazonaws.com/
+      register: external_ip
+    - set_fact: routable_ip="{{external_ip.stdout}}{{route_prefix}}"
+    - name: Create test ansible security group.
+      local_action:
+        module: ec2_group
+        name: "{{ item.sg_name }}"
+        region: "{{ region }}"
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        name: home_server_access
+        description: Access from Home Ip
+        state: present
+        rules:
+          - proto: all
+            from_port: -1
+            to_port: -1
+            cidr_ip: "{{ routable_ip }}"
+        rules_egress:
+          - proto: all
+            cidr_ip: 0.0.0.0/0
+      register: aws_sg
+
+    - name: Tag security group http from home Ip
+      local_action:
+        module: ec2_tag
+        resource: "{{aws_sg.group_id}}"
+        region: "{{ region }}"
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        state: present
+        tags:
+          Name: home_server_access
+
+    - name: create test server
+      local_action:
+        module: ec2
+        region: "{{ region }}"
+        aws_access_key: "{{ access_key }}"
+        aws_secret_key: "{{ secret_key }}"
+        instance_type: "{{ instance_type }}"
+        image: "{{ ami }}"
+        wait: yes
+        group_id: "{{ aws_sg.group_id }}"
+        instance_tags:
+          EnvironmentName: "Test Environment"
+          group: test
+        exact_count: 1
+        count_tag:
+          group: test
