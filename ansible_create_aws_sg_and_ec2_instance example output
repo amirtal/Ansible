@@ -1,0 +1,60 @@
+[root@BMW-180-10109 aws]# ansible-playbook -vvv -i localhost ansible_create_aws_sg_and_ec2_instance.yml --extra-vars "instance_type_var=t2.micro"
+Using /etc/ansible/ansible.cfg as config file
+ [WARNING]: Host file not found: localhost
+
+ [WARNING]: provided hosts list is empty, only localhost is available
+
+ [WARNING]: While constructing a mapping from /opt/aws/ansible_create_aws_sg_and_ec2_instance.yml, line 18, column 9, found a duplicate dict key (name).
+Using last defined value only.
+
+
+PLAYBOOK: ansible_create_aws_sg_and_ec2_instance.yml *******************************
+1 plays in ansible_create_aws_sg_and_ec2_instance.yml
+
+PLAY [localhost] ***************************************************************
+
+TASK [command] *****************************************************************
+task path: /opt/aws/ansible_create_aws_sg_and_ec2_instance.yml:13
+<127.0.0.1> ESTABLISH LOCAL CONNECTION FOR USER: root
+<127.0.0.1> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo $HOME/.ansible/tmp/ansible-tmp-1477706045.82-276599610310954 `" && echo ansible-tmp-1477706045.82-276599610310954="` echo $HOME/.ansible/tmp/ansible-tmp-1477706045.82-276599610310954 `" ) && sleep 0'
+<127.0.0.1> PUT /tmp/tmpeYIiKe TO /root/.ansible/tmp/ansible-tmp-1477706045.82-276599610310954/command
+<127.0.0.1> EXEC /bin/sh -c 'chmod u+x /root/.ansible/tmp/ansible-tmp-1477706045.82-276599610310954/ /root/.ansible/tmp/ansible-tmp-1477706045.82-276599610310954/command && sleep 0'
+<127.0.0.1> EXEC /bin/sh -c 'LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_MESSAGES=en_US.UTF-8 /usr/bin/python2 /root/.ansible/tmp/ansible-tmp-1477706045.82-276599610310954/command; rm -rf "/root/.ansible/tmp/ansible-tmp-1477706045.82-276599610310954/" > /dev/null 2>&1 && sleep 0'
+changed: [localhost] => {"changed": true, "cmd": ["curl", "--silent", "--fail", "http://checkip.amazonaws.com/"], "delta": "0:00:00.413804", "end": "2016-10-29 04:54:06.386623", "invocation": {"module_args": {"_raw_params": "curl --silent --fail http://checkip.amazonaws.com/", "_uses_shell": false, "chdir": null, "creates": null, "executable": null, "removes": null, "warn": true}, "module_name": "command"}, "rc": 0, "start": "2016-10-29 04:54:05.972819", "stderr": "", "stdout": "109.226.62.173", "stdout_lines": ["109.226.62.173"], "warnings": ["Consider using get_url or uri module rather than running curl"]}
+ [WARNING]: Consider using get_url or uri module rather than running curl
+
+
+TASK [set_fact] ****************************************************************
+task path: /opt/aws/ansible_create_aws_sg_and_ec2_instance.yml:15
+ok: [localhost] => {"ansible_facts": {"routable_ip": "109.226.62.173/32"}, "changed": false, "invocation": {"module_args": {"routable_ip": "109.226.62.173/32"}, "module_name": "set_fact"}}
+
+TASK [Create test ansible security group.] *************************************
+task path: /opt/aws/ansible_create_aws_sg_and_ec2_instance.yml:16
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: root
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo $HOME/.ansible/tmp/ansible-tmp-1477706046.67-193467537498769 `" && echo ansible-tmp-1477706046.67-193467537498769="` echo $HOME/.ansible/tmp/ansible-tmp-1477706046.67-193467537498769 `" ) && sleep 0'
+<localhost> PUT /tmp/tmpUBWnzs TO /root/.ansible/tmp/ansible-tmp-1477706046.67-193467537498769/ec2_group
+<localhost> EXEC /bin/sh -c 'chmod u+x /root/.ansible/tmp/ansible-tmp-1477706046.67-193467537498769/ /root/.ansible/tmp/ansible-tmp-1477706046.67-193467537498769/ec2_group && sleep 0'
+<localhost> EXEC /bin/sh -c 'LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_MESSAGES=en_US.UTF-8 /usr/bin/python2 /root/.ansible/tmp/ansible-tmp-1477706046.67-193467537498769/ec2_group; rm -rf "/root/.ansible/tmp/ansible-tmp-1477706046.67-193467537498769/" > /dev/null 2>&1 && sleep 0'
+ok: [localhost -> localhost] => {"changed": false, "group_id": "sg-1852a165", "invocation": {"module_args": {"aws_access_key": "AKIAICITH46DG2UFM63Q", "aws_secret_key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "description": "Access from Home Ip", "ec2_url": null, "name": "home_server_access", "profile": null, "purge_rules": true, "purge_rules_egress": true, "region": "us-east-1", "rules": [{"cidr_ip": "109.226.62.173/32", "from_port": null, "proto": -1, "to_port": null}], "rules_egress": [{"cidr_ip": "0.0.0.0/0", "from_port": null, "proto": -1, "to_port": null}], "security_token": null, "state": "present", "validate_certs": true, "vpc_id": null}, "module_name": "ec2_group"}}
+
+TASK [Tag security group http from home Ip] ************************************
+task path: /opt/aws/ansible_create_aws_sg_and_ec2_instance.yml:36
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: root
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo $HOME/.ansible/tmp/ansible-tmp-1477706048.16-75813532303108 `" && echo ansible-tmp-1477706048.16-75813532303108="` echo $HOME/.ansible/tmp/ansible-tmp-1477706048.16-75813532303108 `" ) && sleep 0'
+<localhost> PUT /tmp/tmpNO0f0K TO /root/.ansible/tmp/ansible-tmp-1477706048.16-75813532303108/ec2_tag
+<localhost> EXEC /bin/sh -c 'chmod u+x /root/.ansible/tmp/ansible-tmp-1477706048.16-75813532303108/ /root/.ansible/tmp/ansible-tmp-1477706048.16-75813532303108/ec2_tag && sleep 0'
+<localhost> EXEC /bin/sh -c 'LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_MESSAGES=en_US.UTF-8 /usr/bin/python2 /root/.ansible/tmp/ansible-tmp-1477706048.16-75813532303108/ec2_tag; rm -rf "/root/.ansible/tmp/ansible-tmp-1477706048.16-75813532303108/" > /dev/null 2>&1 && sleep 0'
+ok: [localhost -> localhost] => {"changed": false, "invocation": {"module_args": {"aws_access_key": "AKIAICITH46DG2UFM63Q", "aws_secret_key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "ec2_url": null, "profile": null, "region": "us-east-1", "resource": "sg-1852a165", "security_token": null, "state": "present", "tags": {"Name": "home_server_access"}, "validate_certs": true}, "module_name": "ec2_tag"}, "msg": "Tags already exists in sg-1852a165."}
+
+TASK [create test server] ******************************************************
+task path: /opt/aws/ansible_create_aws_sg_and_ec2_instance.yml:47
+<localhost> ESTABLISH LOCAL CONNECTION FOR USER: root
+<localhost> EXEC /bin/sh -c '( umask 77 && mkdir -p "` echo $HOME/.ansible/tmp/ansible-tmp-1477706049.38-148627683429423 `" && echo ansible-tmp-1477706049.38-148627683429423="` echo $HOME/.ansible/tmp/ansible-tmp-1477706049.38-148627683429423 `" ) && sleep 0'
+<localhost> PUT /tmp/tmpGX927h TO /root/.ansible/tmp/ansible-tmp-1477706049.38-148627683429423/ec2
+<localhost> EXEC /bin/sh -c 'chmod u+x /root/.ansible/tmp/ansible-tmp-1477706049.38-148627683429423/ /root/.ansible/tmp/ansible-tmp-1477706049.38-148627683429423/ec2 && sleep 0'
+<localhost> EXEC /bin/sh -c 'LANG=en_US.UTF-8 LC_ALL=en_US.UTF-8 LC_MESSAGES=en_US.UTF-8 /usr/bin/python2 /root/.ansible/tmp/ansible-tmp-1477706049.38-148627683429423/ec2; rm -rf "/root/.ansible/tmp/ansible-tmp-1477706049.38-148627683429423/" > /dev/null 2>&1 && sleep 0'
+ok: [localhost -> localhost] => {"changed": false, "instance_ids": null, "instances": [], "invocation": {"module_args": {"assign_public_ip": false, "aws_access_key": "AKIAICITH46DG2UFM63Q", "aws_secret_key": "VALUE_SPECIFIED_IN_NO_LOG_PARAMETER", "count": 1, "count_tag": "{'group': 'test'}", "ebs_optimized": false, "ec2_url": null, "exact_count": 1, "group": null, "group_id": ["sg-1852a165"], "id": null, "image": "ami-2d39803a", "instance_ids": null, "instance_profile_name": null, "instance_tags": {"EnvironmentName": "Test Environment", "group": "test"}, "instance_type": "t2.micro", "kernel": null, "key_name": null, "monitoring": false, "network_interfaces": null, "placement_group": null, "private_ip": null, "profile": null, "ramdisk": null, "region": "us-east-1", "security_token": null, "source_dest_check": true, "spot_launch_group": null, "spot_price": null, "spot_type": "one-time", "spot_wait_timeout": "600", "state": "present", "tenancy": "default", "termination_protection": false, "user_data": null, "validate_certs": true, "volumes": null, "vpc_subnet_id": null, "wait": true, "wait_timeout": "300", "zone": null}, "module_name": "ec2"}, "tagged_instances": [{"ami_launch_index": "0", "architecture": "x86_64", "block_device_mapping": {"/dev/sda1": {"delete_on_termination": true, "status": "attached", "volume_id": "vol-0c5334f79e3b2fc4a"}}, "dns_name": "ec2-54-152-202-248.compute-1.amazonaws.com", "ebs_optimized": false, "groups": {"sg-1852a165": "home_server_access"}, "hypervisor": "xen", "id": "i-0be9e3d60ecb0de1d", "image_id": "ami-2d39803a", "instance_type": "t2.micro", "kernel": null, "key_name": null, "launch_time": "2016-10-29T01:52:24.000Z", "placement": "us-east-1a", "private_dns_name": "ip-172-31-48-138.ec2.internal", "private_ip": "172.31.48.138", "public_dns_name": "ec2-54-152-202-248.compute-1.amazonaws.com", "public_ip": "54.152.202.248", "ramdisk": null, "region": "us-east-1", "root_device_name": "/dev/sda1", "root_device_type": "ebs", "state": "running", "state_code": 16, "tags": {"Name": "Test Environment", "group": "test"}, "tenancy": "default", "virtualization_type": "hvm"}]}
+
+PLAY RECAP *********************************************************************
+localhost                  : ok=5    changed=1    unreachable=0    failed=0
+
