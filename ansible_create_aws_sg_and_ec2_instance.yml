@@ -6,8 +6,8 @@
   vars:
     region: us-east-1
     route_prefix: /32
-    access_key: AKIAICITH46DG2UFM63Q
-    secret_key: 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
+    access_key: XXXXXXXXXXXXXXXXXXXXXXX
+    secret_key: XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     ami: ami-2d39803a # ubuntu 14.04 (free tier)
     instance_type: "{{ instance_type_var}}"
   tasks:
